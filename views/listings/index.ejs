@@ -1,0 +1,241 @@
+<% layout('/layouts/boilerplate') -%>
+    <style>
+        .navcontainer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .filters-container {
+            display: flex;
+            align-items: center;
+            width: 70%;
+            margin-left: 0px;
+        }
+
+        .filters-wrapper {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        #filters {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        #filters a {
+            color: black;
+            text-decoration: none;
+        }
+
+        #filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter {
+            text-align: center;
+            margin: 2rem 1.5rem;
+            opacity: 0.7;
+            flex-shrink: 0;
+            transition: opacity 0.3s;
+        }
+
+        .filter.selected {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .filter:hover {
+            opacity: 1;
+        }
+
+        .arrow {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease;
+        }
+
+        .arrow:hover {
+            transform: scale(1.05);
+        }
+
+        .toggle-tax {
+            display: flex;
+            align-items: center;
+            padding: 0.4rem 0.8rem;
+            border: 1.5px solid #ddd;
+            border-radius: 999px;
+            height: 3rem;
+            margin-left: 0px;
+
+        }
+
+        .toggle-tax:hover,
+        .form-check-input:hover,
+        .form-check-label:hover {
+            cursor: pointer;
+        }
+
+
+
+        .toggle-tax .form-check-input:checked {
+            background-color: #ff385c !important;
+            border-color: #ff385c !important;
+        }
+
+        /* Smooth feel */
+        .toggle-tax .form-check-input {
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        .tax-info {
+            display: none;
+        }
+    </style>
+    <div class="navcontainer">
+        <div class="filters-container">
+            <button class="arrow left" onclick="scrollLeft()">❮</button>
+
+            <div class="filters-wrapper">
+                <div id="filters">
+
+                    <a href="/listings" class="filter <%= !category ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-house"></i></div>
+                        <p>All</p>
+                    </a>
+
+                    <a href="/listings?category=Trending" class="filter <%category==='Trending' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-fire"></i></div>
+                        <p>Trending</p>
+                    </a>
+
+                    <a href="/listings?category=Rooms" class="filter <%= category==='Rooms' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-bed"></i></div>
+                        <p>Rooms</p>
+                    </a>
+
+                    <a href="/listings?category=Iconic Cities"
+                        class="filter <%= category==='Iconic Cities' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-mountain-city"></i></div>
+                        <p>Iconic Cities</p>
+                    </a>
+
+                    <a href="/listings?category=Mountain" class="filter <%= category==='mountain' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-mountain"></i></div>
+                        <p>Mountain</p>
+                    </a>
+
+                    <a href="/listings?category=Castle" class="filter <%= category==='Castle' ? 'selected' : '' %>">
+                        <div><i class="fa-brands fa-fort-awesome"></i></div>
+                        <p>Castle</p>
+                    </a>
+
+                    <a href="/listings?category=Amazing Pool"
+                        class="filter <%= category==='Amazing Pool' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-person-swimming"></i></div>
+                        <p>Amazing Pool</p>
+                    </a>
+
+                    <a href="/listings?category=Camping" class="filter <%= category==='Camping' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-campground"></i></div>
+                        <p>Camping</p>
+                    </a>
+
+                    <a href="/listings?category=Farm" class="filter <%= category==='Farm' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-cow"></i></div>
+                        <p>Farm</p>
+                    </a>
+
+                    <a href="/listings?category=Arctic" class="filter <%= category==='Arctic' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-snowflake"></i></div>
+                        <p>Arctic</p>
+                    </a>
+
+                    <a href="/listings?category=Tree House"
+                        class="filter <%= category==='Tree House' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-tree"></i></div>
+                        <p>Tree House</p>
+                    </a>
+
+                    <a href="/listings?category=Beach Front"
+                        class="filter <%= category==='Beach Front' ? 'selected' : '' %>">
+                        <div><i class="fa-solid fa-tree"></i></div>
+                        <p>Beach Front</p>
+                    </a>
+
+                </div>
+            </div>
+
+            <button class="arrow right" onclick="scrollRight()">❯</button>
+
+
+        </div>
+        <div class="toggle-tax">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" id="switchCheckDefault">
+                <label class="form-check-label" for="switchCheckDefault">
+                    Display after Taxes
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+        <% for(let listing of AllListing){%>
+            <a href="/listings/<%=listing._id%>" class="listing-link">
+                <div class="card col listing-card" style="width: 20rem;">
+                    <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b>
+                                <%=listing.title%>
+                            </b> <br />
+                            &#x20B9 <%=listing.price.toLocaleString("en-IN")%> / night
+                                <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
+                        </p>
+                    </div>
+                </div>
+            </a>
+            <% }%>
+    </div>
+
+    <script>
+        const filters = document.getElementById("filters");
+
+        function scrollLeft() {
+            filters.scrollBy({ left: -300, behavior: "smooth" });
+        }
+
+        function scrollRight() {
+            filters.scrollBy({ left: 300, behavior: "smooth" });
+        }
+
+        let taxSwitch = document.getElementById("switchCheckDefault");
+        taxSwitch.addEventListener("click", () => {
+            let taxInfo = document.getElementsByClassName("tax-info");
+            for (info of taxInfo) {
+                if (info.style.display != "inline") {
+                    info.style.display = "inline"
+                } else {
+                    info.style.display = "none"
+                }
+            }
+        })
+    </script>
