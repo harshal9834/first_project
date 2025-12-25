@@ -37,7 +37,7 @@ const User = require("./models/user.js");
 const listingRouter = require("./Routes/listings.js");
 const reviewRouter = require("./Routes/review.js");
 const userRouter = require("./Routes/user.js");
-// const cookie = require('express-session/session/cookie.js');
+const cookie = require('express-session/session/cookie.js');
 
 console.log(typeof MongoStore.create);
 const store = MongoStore.create({
@@ -49,9 +49,10 @@ const store = MongoStore.create({
 
 });
 
-store.on("error", () => {
+store.on("error", (err) => {
     console.log("ERROR IN MONGO SESSION", err);
 });
+
 
 const sessionOption = {
 
@@ -91,10 +92,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
+    res.locals.currUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currUser = req.user;
-    res.locals.reviewUser = Review.auther;
+    // res.locals.reviewUser = Review.auther;
     next();
 });
 
