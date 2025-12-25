@@ -2,7 +2,12 @@ if (process.env.NODE_ENV != "production") {
     require('dotenv').config();
 };
 // console.log(process.env.SECRET);
-
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.engine('ejs', ejsMate);
+app.use(express.static(path.join(__dirname, "/public")));
 
 const express = require("express");
 const app = express();
@@ -73,12 +78,7 @@ main().then(() => {
 }).catch((err) => {
     console.log(err);
 })
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.engine('ejs', ejsMate);
-app.use(express.static(path.join(__dirname, "/public")));
+
 
 app.use(session(sessionOption));
 app.use(flash());
