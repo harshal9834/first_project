@@ -11,6 +11,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 const express = require("express");
 const app = express();
+
 const mongoose = require("mongoose");
 // const listing = require("./models/listing.js");
 const path = require("path");
